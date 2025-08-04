@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import { Separator } from "./components/ui/separator";
 import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail } from "lucide-react";
 
-import { subscribeEmail } from "./lib/subscribeEmail"; // your firestore helper
+import { subscribeEmail } from "./lib/subscribeEmail";
 
 export function Footer() {
   const footerLinks = {

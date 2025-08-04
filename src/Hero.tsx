@@ -3,11 +3,9 @@ import { Button } from "./components/ui/button";
 import {  Play } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
 import { PlanningModal } from "./components/ui/PlanningModal";
-import { useNavigate } from "react-router-dom";
 
 export function Hero() {
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
 
   return (
     <section id="home" className="bg-background">

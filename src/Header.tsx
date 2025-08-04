@@ -1,17 +1,17 @@
 import { Button } from "./components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigationItems = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Services", href: "#services" },
-    { name: "Events", href: "#events" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Services", href: "/services" },
+    { name: "Events", href: "/events" },
+    { name: "Contact", href: "/contact" },
   ];
 
   return (
@@ -20,25 +20,30 @@ export function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <div className="flex items-center">
+            <NavLink to="/" className="flex items-center">
               <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
                 <span className="text-primary-foreground font-medium">E</span>
               </div>
               <span className="ml-2 text-xl font-medium text-foreground">Eunioa</span>
-            </div>
+            </NavLink>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               {navigationItems.map((item) => (
-                <a
+                <NavLink
                   key={item.name}
-                  href={item.href}
-                  className="text-foreground hover:text-primary px-3 py-2 rounded-md transition-colors"
+                  to={item.href}
+                  className={({ isActive }) =>
+                    `px-3 py-2 rounded-md transition-colors relative ${isActive
+                      ? "text-primary font-medium after:absolute after:bottom-0 after:left-3 after:right-3 after:h-0.5 after:bg-primary"
+                      : "text-foreground hover:text-primary"
+                    }`
+                  }
                 >
                   {item.name}
-                </a>
+                </NavLink>
               ))}
             </div>
           </nav>
@@ -47,11 +52,6 @@ export function Header() {
           <div className="hidden md:block">
             <Button>Plan Your Event</Button>
           </div>
-          {/* <div className="pt-4">
-            <Link to="/admin" className="ml-4 text-primary hover:underline">
-              Admin
-            </Link>
-          </div> */}
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -74,14 +74,19 @@ export function Header() {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-border">
               {navigationItems.map((item) => (
-                <a
+                <NavLink
                   key={item.name}
-                  href={item.href}
-                  className="text-foreground hover:text-primary block px-3 py-2 rounded-md transition-colors"
+                  to={item.href}
                   onClick={() => setIsMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `block px-3 py-2 rounded-md transition-colors ${isActive
+                      ? "text-primary font-medium bg-primary/10"
+                      : "text-foreground hover:text-primary"
+                    }`
+                  }
                 >
                   {item.name}
-                </a>
+                </NavLink>
               ))}
               <div className="pt-4">
                 <Button className="w-full">Plan Your Event</Button>
