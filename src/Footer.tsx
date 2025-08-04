@@ -1,7 +1,10 @@
+import React, { useState, useEffect } from "react";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
-import { Separator } from "./components/ui/separator"
+import { Separator } from "./components/ui/separator";
 import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail } from "lucide-react";
+
+import { subscribeEmail } from "./lib/subscribeEmail"; // your firestore helper
 
 export function Footer() {
   const footerLinks = {
@@ -43,6 +46,46 @@ export function Footer() {
     { icon: <Youtube className="h-5 w-5" />, href: "#", label: "YouTube" }
   ];
 
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const handleSubscribe = async () => {
+    if (!emailRegex.test(email)) {
+      showStatus("Enter a valid email address.");
+      return;
+    }
+
+    setLoading(true);
+    const result = await subscribeEmail(email);
+    setLoading(false);
+
+    if (result.success) {
+      showStatus("Subscribed! Thanks!");
+      setEmail("");
+    } else {
+      showStatus("Subscription failed. Try again.");
+    }
+  };
+
+  const showStatus = (msg: string) => {
+    setVisible(false);
+    setTimeout(() => {
+      setStatus(msg);
+      setVisible(true);
+    }, 100);
+  };
+
+  useEffect(() => {
+    if (visible) {
+      const timeout = setTimeout(() => setVisible(false), 3500);
+      return () => clearTimeout(timeout);
+    }
+  }, [visible]);
+
   return (
     <footer className="bg-card border-t border-border">
       {/* Newsletter Section */}
@@ -55,18 +98,30 @@ export function Footer() {
                 Get event planning tips, inspiration, and exclusive updates delivered to your inbox.
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <Input
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="w-full"
-                />
-              </div>
-              <Button className="whitespace-nowrap">
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <Input
+                type="email"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full"
+                disabled={loading}
+              />
+              <Button onClick={handleSubscribe} disabled={loading} className="whitespace-nowrap">
                 <Mail className="mr-2 h-4 w-4" />
-                Subscribe
+                {loading ? "Subscribing..." : "Subscribe"}
               </Button>
+            </div>
+
+            {/* Animated Status */}
+            <div className="relative h-6 mt-2 lg:col-span-2">
+              <p
+                className={`text-sm text-muted-foreground absolute transition-all duration-500 ease-in-out
+                  ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}`}
+                style={{ willChange: "opacity, transform" }}
+              >
+                {status}
+              </p>
             </div>
           </div>
         </div>
@@ -85,8 +140,8 @@ export function Footer() {
                 <span className="ml-2 text-xl font-medium">Eunioa</span>
               </div>
               <p className="text-muted-foreground max-w-md">
-                Creating extraordinary events that connect people and celebrate life's 
-                most important moments. From intimate gatherings to grand celebrations, 
+                Creating extraordinary events that connect people and celebrate life's
+                most important moments. From intimate gatherings to grand celebrations,
                 we organize, host, and coordinate with precision and passion.
               </p>
               <div className="flex items-center space-x-4">

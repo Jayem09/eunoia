@@ -1,8 +1,14 @@
+import { useState } from "react";
 import { Button } from "./components/ui/button";
-import { ArrowRight, Play } from "lucide-react";
+import {  Play } from "lucide-react";
 import { ImageWithFallback } from "./components/figma/ImageWithFallback";
+import { PlanningModal } from "./components/ui/PlanningModal";
+import { useNavigate } from "react-router-dom";
 
 export function Hero() {
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
   return (
     <section id="home" className="bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -15,22 +21,22 @@ export function Hero() {
                 <span className="text-primary"> Events</span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl">
-                From intimate gatherings to grand celebrations, we organize, host, and coordinate 
+                From intimate gatherings to grand celebrations, we organize, host, and coordinate
                 events that leave lasting impressions. Let us bring your vision to life.
               </p>
             </div>
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="group">
+              <Button size="lg" onClick={() => setShowModal(true)}>
                 Start Planning
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button variant="outline" size="lg" className="group">
                 <Play className="mr-2 h-4 w-4" />
                 View Our Work
               </Button>
             </div>
+            {showModal && <PlanningModal onClose={() => setShowModal(false)} />}
 
             {/* Stats */}
             <div className="flex flex-wrap gap-8 pt-8">
@@ -60,7 +66,6 @@ export function Hero() {
                 />
               </div>
             </div>
-            {/* Floating elements */}
             <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary rounded-full opacity-20"></div>
             <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-accent rounded-full opacity-30"></div>
           </div>

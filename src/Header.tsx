@@ -1,6 +1,7 @@
 import { Button } from "./components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,6 +47,11 @@ export function Header() {
           <div className="hidden md:block">
             <Button>Plan Your Event</Button>
           </div>
+          {/* <div className="pt-4">
+            <Link to="/admin" className="ml-4 text-primary hover:underline">
+              Admin
+            </Link>
+          </div> */}
 
           {/* Mobile menu button */}
           <div className="md:hidden">
